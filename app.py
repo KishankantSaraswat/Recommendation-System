@@ -81,5 +81,6 @@ def movie_details(name):
     return render_template('moviepage.html', details = details_list[0])
 
 
+# This block is only used for local development
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
