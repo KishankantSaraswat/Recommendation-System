@@ -48,13 +48,17 @@ netflix_data['IMDb Score'] = netflix_data['IMDb Score'].fillna(6.6)
 
 # Create 'soup' feature for all movies
 new_features = ['Genre', 'Tags', 'Actors', 'ViewerRating']
-netflix_data[new_features] = netflix_data[new_features].applymap(prepare_data)
+for feature in new_features:
+    netflix_data[feature] = netflix_data[feature].map(prepare_data)
+
 netflix_data['soup'] = netflix_data.apply(create_soup, axis=1)
 
 # Create the count matrix and cosine similarity matrix
 count = CountVectorizer(stop_words='english')
 count_matrix = count.fit_transform(netflix_data['soup'])
-cosine_sim2 = cosine_similarity(count_matrix, count_matrix)
+
+# Using a sparse representation of the cosine similarity matrix
+cosine_sim2 = cosine_similarity(count_matrix, count_matrix, dense_output=False)
 
 # Reset index and create a Series for title indices
 netflix_data.reset_index(inplace=True)
